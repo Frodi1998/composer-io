@@ -1,13 +1,23 @@
 {
   "name": "composer-io",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Modern middleware composer",
+  "type": "commonjs",
+  "license": "MIT",
+  "author": {
+    "name": "Rafael Abdulov (Frodi1998)"
+  },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "type": "commonjs",
-  "author": {
-    "name": "Rafael Abdulov (Frodi1998)"
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
   },
   "scripts": {
     "test": "vitest",
@@ -19,6 +29,12 @@
     "prebuild": "rimraf dist",
     "build": "tsup"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Frodi1998/composer-io.git"
+  },
+  "homepage": "https://github.com/Frodi1998/composer-io#readme",
+  "bugs": "https://github.com/Frodi1998/composer-io/issues",
   "keywords": [
     "typescript",
     "compose",
@@ -26,13 +42,6 @@
     "middleware",
     "esm"
   ],
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    }
-  },
-  "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.11.16",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
