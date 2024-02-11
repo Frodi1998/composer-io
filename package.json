@@ -1,0 +1,72 @@
+{
+  "name": "composer-io",
+  "version": "1.0.0",
+  "description": "Modern middleware composer",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "type": "commonjs",
+  "author": {
+    "name": "Rafael Abdulov (Frodi1998)"
+  },
+  "scripts": {
+    "test": "vitest",
+    "test:bench": "node scripts/bench.js",
+    "coverage": "vitest run --coverage",
+    "lint": "eslint \"src/**/*ts\"",
+    "prettier": "prettier --write",
+    "typecheck": "tsc --noEmit",
+    "prebuild": "rimraf dist",
+    "build": "tsup"
+  },
+  "keywords": [
+    "typescript",
+    "compose",
+    "composer",
+    "middleware",
+    "esm"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "@vitest/coverage-v8": "^1.2.2",
+    "benchmark": "^2.1.4",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^9.0.10",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5",
+    "rimraf": "^5.0.5",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,md,html}": [
+      "npm run prettier"
+    ],
+    "*.ts": [
+      "npm run lint",
+      "npm run typecheck"
+    ]
+  },
+  "engines": {
+    "node": ">=14.17"
+  }
+}

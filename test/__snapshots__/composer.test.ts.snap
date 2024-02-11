@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Composer > .errorBoundary > should catch errors from child middleware > damn 1`] = `"Error in middleware: damn"`;
+
+exports[`Composer > .errorBoundary > should catch errors from passed middleware > damn 1`] = `"Error in middleware: damn"`;
