@@ -3,6 +3,10 @@
 
 </p>
 
+Этот модуль разработан с использованием и вдохновением от [middleware-io](https://github.com/negezor/middleware-io)
+и [grammyjs](https://github.com/grammyjs/grammy).
+Огромная благодарность [negezor](https://github.com/negezor) и [KnorpelSenf](https://github.com/KnorpelSenf) за их труд и вклад в сообщество разработчиков!
+
 > **COMPOSER-IO** - Modern middleware
 
 <!-- | 📖 [Documentation](docs/) |
