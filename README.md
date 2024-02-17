@@ -5,14 +5,12 @@
 
 </p>
 
-Этот модуль разработан с использованием и вдохновением от [middleware-io](https://github.com/negezor/middleware-io)
-и [grammyjs](https://github.com/grammyjs/grammy).
-Огромная благодарность [negezor](https://github.com/negezor) и [KnorpelSenf](https://github.com/KnorpelSenf) за их труд и вклад в сообщество разработчиков!
+This module is developed using and inspired by [middleware-io](https://github.com/negezor/middleware-io) and [grammyjs](https://github.com/grammyjs/grammy). Huge thanks to [negezor](https://github.com/negezor) and [KnorpelSenf](https://github.com/KnorpelSenf) for their efforts and contribution to the developer community!
 
 > **COMPOSER-IO** - Modern middleware
 
-| [API Reference](https://tsdocs.dev/docs/composer-io/1.0.4/index.html) |
-| --------------------------------------------------------------------- |
+| [API Reference](https://tsdocs.dev/docs/composer-io/latest/index.html) |
+| ---------------------------------------------------------------------- |
 
 <!-- | 📖 [Documentation](docs/) |
 |---------------------------| -->
