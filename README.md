@@ -11,8 +11,8 @@
 
 > **COMPOSER-IO** - Modern middleware
 
-| [API Reference](https://tsdocs.dev/docs/composer-io) |
-| ---------------------------------------------------- |
+| [API Reference](https://tsdocs.dev/docs/composer-io/1.0.4) |
+| ---------------------------------------------------------- |
 
 <!-- | 📖 [Documentation](docs/) |
 |---------------------------| -->
