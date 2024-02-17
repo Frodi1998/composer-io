@@ -4,6 +4,8 @@
 <a href="https://www.npmjs.com/package/composer-io"><img src="https://img.shields.io/npm/v/composer-io.svg?style=flat-square" alt="NPM version"></a>
 <a href="https://www.npmjs.com/package/composer-io"><img src="https://img.shields.io/npm/dt/composer-io.svg?style=flat-square" alt="NPM downloads"></a>
 
+<p align="center">
+
 </p>
 
 Этот модуль разработан с использованием и вдохновением от [middleware-io](https://github.com/negezor/middleware-io)
