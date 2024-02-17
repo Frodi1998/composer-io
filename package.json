@@ -1,6 +1,6 @@
 {
   "name": "composer-io",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Modern middleware composer",
   "type": "commonjs",
   "license": "MIT",
@@ -27,7 +27,7 @@
     "prettier": "prettier --write",
     "typecheck": "tsc --noEmit",
     "prebuild": "rimraf dist",
-    "build": "tsup"
+    "build": "tsup && rimraf dist/index.d.mts"
   },
   "repository": {
     "type": "git",
