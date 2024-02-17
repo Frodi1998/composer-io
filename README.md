@@ -7,8 +7,6 @@
 
 This module is developed using and inspired by [middleware-io](https://github.com/negezor/middleware-io) and [grammyjs](https://github.com/grammyjs/grammy). Huge thanks to [negezor](https://github.com/negezor) and [KnorpelSenf](https://github.com/KnorpelSenf) for their efforts and contribution to the developer community!
 
-> **COMPOSER-IO** - Modern middleware
-
 | [API Reference](https://tsdocs.dev/docs/composer-io/latest/index.html) |
 | ---------------------------------------------------------------------- |
 
@@ -23,6 +21,8 @@ This module is developed using and inspired by [middleware-io](https://github.co
 4. **Powerful.** Supports following additional features:
    - The library has enough built-in snippets;
    - The middleware chain builder;
+   - Supports multi-composition pattern for convenient sequential operations, following the Composite design pattern.
+   - Routing support for handling various request paths.
 
 ## Installation
 
@@ -47,27 +47,25 @@ This module is developed using and inspired by [middleware-io](https://github.co
 import { compose } from 'composer-io';
 
 const composedMiddleware = compose(
-  ...[
-    async (context, next) => {
-      // Step 1
+  async (context, next) => {
+    // Step 1
 
-      await next();
+    await next();
 
-      // Step 4
+    // Step 4
 
-      // Print the current date from the next middleware
-      console.log(context.now);
-    },
-    async (context, next) => {
-      // Step 2
+    // Print the current date from the next middleware
+    console.log(context.now);
+  },
+  async (context, next) => {
+    // Step 2
 
-      context.now = Date.now();
+    context.now = Date.now();
 
-      await next();
+    await next();
 
-      // Step 3
-    },
-  ],
+    // Step 3
+  },
 );
 
 composedMiddleware({}, () => {
