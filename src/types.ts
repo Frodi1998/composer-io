@@ -74,7 +74,7 @@ export type CaughtMiddlewareHandler<T> = (
   error: Error,
 ) => MiddlewareReturn;
 
-export type ErrorBoundaryMiddlewareHandler<T extends UnknownObject> = (
-  error: BoundaryError<T>,
-  next: NextMiddleware,
-) => MiddlewareReturn;
+export type ErrorBoundaryMiddlewareHandler<
+  T extends UnknownObject,
+  E extends BoundaryError<T> = BoundaryError<T>,
+> = (error: E, next: NextMiddleware) => MiddlewareReturn;
