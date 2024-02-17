@@ -26,6 +26,9 @@ import {
   UnknownObject,
 } from './types';
 
+/**
+ * A flexible middleware composer that allows composing, routing, and managing middleware chains.
+ */
 export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
   static builder<Context extends UnknownObject>(...mw: Middleware[]) {
     return new Composer<Context>(...mw);
@@ -34,8 +37,7 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
   protected handler: MiddlewareFn<C>;
 
   /**
-   *
-   * @param {...Middleware<C>[]} middleware
+   * Creates an instance of Composer.
    */
   constructor(...middleware: Middleware<C>[]) {
     this.handler =
@@ -44,10 +46,16 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
         : compose(...middleware.map(flattenMiddleware));
   }
 
+  /**
+   * Gets the composed middleware function.
+   */
   get middleware() {
     return this.handler;
   }
 
+  /**
+   * Clones the current composer instance.
+   */
   clone(): Composer<C> {
     const composer = new Composer<C>(this.handler);
 
@@ -57,9 +65,7 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
   }
 
   /**
-   * Adds middleware to the chain
-   *
-   * @param middleware
+   * Adds middleware to the chain.
    */
   use(...middleware: Middleware<C>[]): Composer<C> {
     const composer = new Composer(...middleware);
@@ -69,14 +75,14 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
   }
 
   /**
-   * Lazily asynchronously gets middleware
+   * Lazily asynchronously gets middleware.
    */
   lazy(factory: LazyMiddlewareFactory<C>): Composer<C> {
     return this.use(getLazyMiddleware(factory));
   }
 
   /**
-   * Runs the middleware and force call `next()`
+   * Runs the middleware and force call `next()`.
    */
   tap(...middleware: Middleware<C>[]): Composer<C> {
     const composer = new Composer(...middleware.map(getTapMiddleware));
@@ -85,6 +91,9 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
     return composer;
   }
 
+  /**
+   * Forks the middleware chain, allowing it to run in parallel with the main chain.
+   */
   fork(...middleware: Middleware<C>[]): Composer<C> {
     const composer = new Composer(...middleware);
     this.use((ctx, next) =>
@@ -110,9 +119,6 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
 
   /**
    * Conditionally runs optional middleware or skips middleware
-   *
-   * @param condition The predicate to check
-   * @param middleware The middleware to register
    */
   filter(
     condition: BranchMiddlewareCondition<C>,
@@ -126,9 +132,6 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
 
   /**
    * Conditionally runs middleware or stops the chain
-   *
-   * @param condition The predicate to check
-   * @param middleware The middleware to register
    */
   drop(
     condition: BranchMiddlewareCondition<C>,
@@ -154,10 +157,6 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
    *    // Route it!
    *    composer.route(router, routeHandlers)
    * ```
-   *
-   * @param router
-   * @param routeHandlers
-   * @param fallback
    */
   route<R extends Record<PropertyKey, Middleware<C>>>(
     router: (ctx: C) => MaybePromise<undefined | keyof R>,
@@ -175,9 +174,7 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
   }
 
   /**
-   *
-   * @param beforeMiddleware
-   * @param middleware
+   * Adds middleware to be executed before the existing middleware.
    */
   before(
     beforeMiddleware: MaybeArray<Middleware<C>>,
@@ -192,9 +189,7 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
   }
 
   /**
-   *
-   * @param middleware
-   * @param afterMiddleware
+   * Adds middleware to be executed after the existing middleware.
    */
   after(
     middleware: MaybeArray<Middleware<C>>,
@@ -209,10 +204,7 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
   }
 
   /**
-   *
-   * @param beforeMiddleware
-   * @param middleware
-   * @param afterMiddleware
+   * Enforces the order of middleware execution by interleaving them with before and after middleware.
    */
   enforce(
     beforeMiddleware: Middleware<C>[],
@@ -227,8 +219,6 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
   /**
    * Concurrently launches middleware,
    * the chain will continue if `next()` is called in all middlewares
-   *
-   * @param middlewares
    */
   concurrency(middlewares: Middleware<C>[]): Composer<C> {
     return this.use(getConcurrencyMiddleware(middlewares));
@@ -236,9 +226,6 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
 
   /**
    * Catches errors in the middleware chain
-   *
-   * @param errorHandler
-   * @returns
    */
   caught(errorHandler: CaughtMiddlewareHandler<C>): Composer<C> {
     return this.use(async (ctx, next) => {
@@ -259,9 +246,6 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
    * out of this part of your middleware system, unless the supplied error
    * handler rethrows them, in which case the next surrounding error boundary
    * will catch the error.
-   *
-   * @param errorHandler The error handler to use
-   * @param middleware The middleware to protect
    */
   errorBoundary(
     errorHandler: ErrorBoundaryMiddlewareHandler<C>,
@@ -289,8 +273,6 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
 
   /**
    * Enters another composer, extending its functionality and running its handlers along with its own.
-   *
-   * @param parent The parent composer to enter.
    *
    * @usage
    * ``` ts
