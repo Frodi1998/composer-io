@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const { Suite } = require('benchmark');
 
 const { compose, noopNext } = require('../dist');
@@ -14,6 +13,7 @@ const makeSuite = ({ name }) => {
 
   suite.on('cycle', ({ target }) => {
     const { hz } = target;
+
     const text = `${target.name} » ${numberFormat(
       hz.toFixed(hz < 100 ? 2 : 0),
     )} op/s ±${target.stats.rme.toFixed(2)}%\n`;
@@ -39,6 +39,7 @@ const makeSuite = ({ name }) => {
         },
       });
     },
+
     run: suite.run.bind(suite),
   };
 };

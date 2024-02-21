@@ -6,4 +6,4 @@ dist
 
 tsup*
 *config*
-*bench.js
+bench.js
