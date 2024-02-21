@@ -1,6 +1,18 @@
 import { UnknownObject } from '.';
 
+/**
+ * Represents an error that occurred within a certain boundary or context,
+ * accompanied by additional contextual information.
+ *
+ * @typeparam C - The type of the context associated with the error.
+ */
 export class BoundaryError<C extends UnknownObject> extends Error {
+  /**
+   * Creates an instance of `BoundaryError`.
+   *
+   * @param error - The original error or the error message.
+   * @param _ctx - The context associated with the error.
+   */
   constructor(
     public readonly error: unknown,
     private _ctx: C,
@@ -12,10 +24,16 @@ export class BoundaryError<C extends UnknownObject> extends Error {
     if (error instanceof Error) this.stack = error.stack;
   }
 
+  /**
+   * Gets the context associated with the error.
+   */
   get ctx() {
     return this._ctx;
   }
 
+  /**
+   * Alias for `ctx`.
+   */
   get context() {
     return this._ctx;
   }
