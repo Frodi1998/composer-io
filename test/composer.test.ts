@@ -21,219 +21,6 @@ const delay = (delayed: number): Promise<void> =>
     setTimeout(resolve, delayed);
   });
 
-describe('Composer', (): void => {
-  it('should work', async (): Promise<void> => {
-    const out: number[] = [];
-
-    const composer = new Composer();
-
-    composer.use(async (_ctx, next): Promise<void> => {
-      out.push(1);
-
-      await delay(1);
-      await next();
-      await delay(1);
-
-      out.push(6);
-    });
-
-    composer.use(async (_ctx, next): Promise<void> => {
-      out.push(2);
-
-      await delay(1);
-      await next();
-      await delay(1);
-
-      out.push(5);
-    });
-
-    composer.use(async (_ctx, next): Promise<void> => {
-      out.push(3);
-
-      await delay(1);
-      await next();
-      await delay(1);
-
-      out.push(4);
-    });
-
-    const { middleware } = composer;
-
-    await middleware({}, noopNext);
-
-    expect(out).toEqual(expect.arrayContaining([1, 2, 3, 4, 5, 6]));
-  });
-
-  it('should keep the context', async (): Promise<void> => {
-    const context = {};
-
-    const composer = new Composer();
-
-    composer.use(async (ctx, next): Promise<void> => {
-      await next();
-
-      expect(ctx).toBe(context);
-    });
-
-    composer.use(async (ctx, next): Promise<void> => {
-      await next();
-
-      expect(ctx).toBe(context);
-    });
-
-    composer.use(async (ctx, next): Promise<void> => {
-      await next();
-
-      expect(ctx).toBe(context);
-    });
-
-    const { middleware } = composer;
-
-    await middleware(context, noopNext);
-  });
-
-  it('should work with 0 middleware', async (): Promise<void> => {
-    const { middleware } = new Composer();
-
-    await middleware({}, noopNext);
-  });
-
-  it('should reject on errors in middleware', async (): Promise<void> => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const composer = new Composer<Record<string, any>>();
-
-    composer.use(async (ctx, next): Promise<void> => {
-      ctx.now = Date.now();
-
-      await next();
-    });
-
-    composer.use(async (): Promise<never> => {
-      throw new Error();
-    });
-
-    const { middleware } = composer;
-
-    try {
-      await middleware({}, noopNext);
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error);
-
-      return;
-    }
-
-    throw new Error();
-  });
-
-  it('should only accept middleware as functions', (): void => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      new Composer().use(null);
-
-      throw new Error('Middleware must be composed of functions');
-    } catch (error) {
-      expect(error).toBeInstanceOf(TypeError);
-    }
-  });
-
-  it('composer should be cloned', async (): Promise<void> => {
-    type CloneContext = {
-      baseValue?: boolean;
-      value: 'first' | 'second' | 'default';
-    };
-
-    const baseComposer = new Composer<CloneContext>();
-
-    baseComposer.use((context, next) => {
-      context.baseValue = true;
-
-      return next();
-    });
-
-    const firstComposer = baseComposer.clone();
-    const secondComposer = baseComposer.clone();
-
-    firstComposer.use((context, next) => {
-      context.value = 'first';
-
-      return next();
-    });
-
-    secondComposer.use((context, next) => {
-      context.value = 'second';
-
-      return next();
-    });
-
-    const baseContext = { value: 'default' } as CloneContext;
-    const firstContext = { value: 'default' } as CloneContext;
-    const secondContext = { value: 'default' } as CloneContext;
-
-    await baseComposer.run(baseContext);
-    await firstComposer.run(firstContext);
-    await secondComposer.run(secondContext);
-
-    expect(baseContext).toMatchObject({
-      baseValue: true,
-      value: 'default',
-    });
-
-    expect(firstContext).toMatchObject({
-      baseValue: true,
-      value: 'first',
-    });
-
-    expect(secondContext).toMatchObject({
-      baseValue: true,
-      value: 'second',
-    });
-  });
-
-  it('should create new instance of the Composer class', (): void => {
-    const composer = Composer.builder<{ test: 'test' }>();
-
-    composer.use(context => {
-      if (context.test === 'test') {
-        // ...
-      }
-    });
-
-    expect(composer).toBeInstanceOf(Composer);
-  });
-
-  it('should throw if next() is called multiple times', async (): Promise<void> => {
-    const composer = new Composer();
-
-    composer.use(async (ctx, next): Promise<void> => {
-      await next();
-    });
-
-    composer.use(async (ctx, next): Promise<void> => {
-      await next();
-      await next();
-    });
-
-    composer.use(async (ctx, next): Promise<void> => {
-      await next();
-    });
-
-    const { middleware } = composer;
-
-    try {
-      await middleware({}, noopNext);
-    } catch (e) {
-      expect((e as Error).message).toEqual(
-        expect.stringMatching('multiple times'),
-      );
-
-      return;
-    }
-
-    throw new Error('next() called multiple times');
-  });
-});
-
 describe('Composer', () => {
   const ctx: Context = { message: { text: 'test' } };
   let composer: Composer<Context>;
@@ -255,10 +42,55 @@ describe('Composer', () => {
     expect(middleware.mock.calls[0][0]).toMatchObject(ctx);
   });
 
+  it('should work with 0 middleware', async (): Promise<void> => {
+    const composer = new Composer();
+
+    await composer.run({});
+  });
+
   it('should call constructor handlers', async () => {
     composer = new Composer<Context>(middleware);
     await exec();
     expect(middleware.mock.calls[0][0]).toMatchObject(ctx);
+  });
+
+  it('should create new instance of the Composer class', (): void => {
+    const composer = Composer.builder<{ test: 'test' }>();
+
+    composer.use(context => {
+      if (context.test === 'test') {
+        // ...
+      }
+    });
+
+    expect(composer).toBeInstanceOf(Composer);
+  });
+
+  it('should throw if next() is called multiple times', async (): Promise<void> => {
+    composer.use(async (_ctx, next): Promise<void> => {
+      await next();
+    });
+
+    composer.use(async (_ctx, next): Promise<void> => {
+      await next();
+      await next();
+    });
+
+    composer.use(async (_ctx, next): Promise<void> => {
+      await next();
+    });
+
+    try {
+      await exec();
+    } catch (e) {
+      expect((e as Error).message).toEqual(
+        expect.stringMatching('multiple times'),
+      );
+
+      return;
+    }
+
+    throw new Error('next() called multiple times');
   });
 
   it('should prevent next from being called more than once', async () => {
@@ -278,7 +110,126 @@ describe('Composer', () => {
     await exec();
   });
 
+  describe('.clone', () => {
+    it('composer should be cloned', async (): Promise<void> => {
+      type CloneContext = {
+        baseValue?: boolean;
+        value: 'first' | 'second' | 'default';
+      };
+
+      const baseComposer = new Composer<CloneContext>();
+
+      baseComposer.use((context, next) => {
+        context.baseValue = true;
+
+        return next();
+      });
+
+      const firstComposer = baseComposer.clone();
+      const secondComposer = baseComposer.clone();
+
+      firstComposer.use((context, next) => {
+        context.value = 'first';
+
+        return next();
+      });
+
+      secondComposer.use((context, next) => {
+        context.value = 'second';
+
+        return next();
+      });
+
+      const baseContext = { value: 'default' } as CloneContext;
+      const firstContext = { value: 'default' } as CloneContext;
+      const secondContext = { value: 'default' } as CloneContext;
+
+      await baseComposer.run(baseContext);
+      await firstComposer.run(firstContext);
+      await secondComposer.run(secondContext);
+
+      expect(baseContext).toMatchObject({
+        baseValue: true,
+        value: 'default',
+      });
+
+      expect(firstContext).toMatchObject({
+        baseValue: true,
+        value: 'first',
+      });
+
+      expect(secondContext).toMatchObject({
+        baseValue: true,
+        value: 'second',
+      });
+    });
+  });
+
   describe('.use', () => {
+    it('should work', async (): Promise<void> => {
+      const out: number[] = [];
+
+      composer.use(async (_ctx, next): Promise<void> => {
+        out.push(1);
+
+        await delay(1);
+        await next();
+        await delay(1);
+
+        out.push(6);
+      });
+
+      composer.use(async (_ctx, next): Promise<void> => {
+        out.push(2);
+
+        await delay(1);
+        await next();
+        await delay(1);
+
+        out.push(5);
+      });
+
+      composer.use(async (_ctx, next): Promise<void> => {
+        out.push(3);
+
+        await delay(1);
+        await next();
+        await delay(1);
+
+        out.push(4);
+      });
+
+      await exec();
+
+      expect(out).toEqual(expect.arrayContaining([1, 2, 3, 4, 5, 6]));
+    });
+
+    it('should keep the context', async (): Promise<void> => {
+      const context = {};
+
+      const composer = new Composer();
+
+      composer.use(async (ctx, next): Promise<void> => {
+        await next();
+
+        expect(ctx).toBe(context);
+      });
+
+      composer.use(async (ctx, next): Promise<void> => {
+        await next();
+
+        expect(ctx).toBe(context);
+      });
+
+      composer.use(async (ctx, next): Promise<void> => {
+        await next();
+
+        expect(ctx).toBe(context);
+      });
+
+      await composer.run(context);
+    });
+
     it('should work with multiple handlers', async () => {
       composer.use(
         (_, next) => next(),
