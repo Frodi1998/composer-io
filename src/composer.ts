@@ -238,7 +238,7 @@ export class Composer<C extends UnknownObject> implements MiddlewareObj<C> {
   }
 
   /**
-   * > This is an advanced function.
+   * This is an advanced function.
    *
    * Installs an error boundary that catches errors that happen only inside
    * the given middleware. This allows you to install custom error handlers
