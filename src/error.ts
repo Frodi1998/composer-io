@@ -14,7 +14,7 @@ export class BoundaryError<C extends UnknownObject> extends Error {
    * @param _ctx - The context associated with the error.
    */
   constructor(
-    public readonly error: unknown,
+    public readonly error,
     private _ctx: C,
   ) {
     super(generateBoundaryErrorMessage(error));
