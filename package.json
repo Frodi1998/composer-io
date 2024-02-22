@@ -21,7 +21,7 @@
   },
   "scripts": {
     "test": "vitest",
-    "test:bench": "node scripts/bench.js",
+    "test:bench": "node test/bench.js",
     "coverage": "vitest run --coverage",
     "lint": "eslint \"src/**/*ts\"",
     "prettier": "prettier --write",
