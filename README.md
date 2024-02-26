@@ -2,6 +2,7 @@
 <p align="center">
 <a href="https://www.npmjs.com/package/composer-io"><img src="https://img.shields.io/npm/v/composer-io.svg?style=flat-square" alt="NPM version"></a>
 <a href="https://www.npmjs.com/package/composer-io"><img src="https://img.shields.io/npm/dt/composer-io.svg?style=flat-square" alt="NPM downloads"></a>
+<a href="https://app.codecov.io/gh/Frodi1998/composer-io"><img src="https://img.shields.io/codecov/c/gh/Frodi1998/composer-io.svg?style=flat-square" alt="Coverage"></a>
 
 </p>
 
