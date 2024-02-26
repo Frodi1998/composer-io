@@ -1,0 +1,41 @@
+name: Composer-IO CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 18.x
+          - 20.x
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependency
+        run: npx yarn install --frozen-lockfile
+
+      - name: typechecking
+        run: |
+          npm run typecheck
+
+      - name: lint
+        run: npm run lint
+
+      - name: test
+        run: npm run test
+
+      - name: coverage
+        run: npm run coverage
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: Frodi1998/composer-io
+          directory: ./coverage
