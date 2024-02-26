@@ -10,7 +10,7 @@
     "sourceMap": false,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "removeComments": true,
+    "removeComments": false,
     "esModuleInterop": true,
     "strict": true
   },
