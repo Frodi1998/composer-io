@@ -1,6 +1,6 @@
 {
   "name": "composer-io",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Modern middleware composer",
   "type": "commonjs",
   "license": "MIT",
