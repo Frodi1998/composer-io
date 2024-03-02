@@ -1,4 +1,4 @@
-import { UnknownObject } from '.';
+import type { UnknownObject } from './types';
 
 /**
  * Represents an error that occurred within a certain boundary or context,

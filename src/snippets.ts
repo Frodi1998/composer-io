@@ -1,6 +1,4 @@
-import { compose } from './compose';
-import { flattenMiddleware, noopNext, wrapMiddlewareNextCall } from './helpers';
-import {
+import type {
   BranchMiddlewareCondition,
   LazyMiddlewareFactory,
   MaybeArray,
@@ -10,6 +8,9 @@ import {
   NextMiddleware,
   UnknownObject,
 } from './types';
+
+import { compose } from './compose';
+import { flattenMiddleware, noopNext, wrapMiddlewareNextCall } from './helpers';
 
 /**
  * Call `next()` in middleware

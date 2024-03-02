@@ -1,4 +1,4 @@
-import { BoundaryError } from './error';
+import type { BoundaryError } from './error';
 
 export type MaybePromise<T> = Promise<T> | T;
 export type MaybeArray<T> = T[] | T;

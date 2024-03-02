@@ -1,11 +1,10 @@
-import {
+import { assertMiddlewares } from './helpers';
+import type {
   NextMiddleware,
   MiddlewareReturn,
   NextMiddlewareReturn,
   MiddlewareFn,
 } from './types';
-
-import { assertMiddlewares } from './helpers';
 
 /**
  * Compose an array of middleware handlers into a single handler
