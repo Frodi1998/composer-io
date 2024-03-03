@@ -1,11 +1,5 @@
 import { Mock, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  Composer,
-  Middleware,
-  NextMiddleware,
-  UnknownObject,
-  noopNext,
-} from '../src';
+import { Composer, Middleware, NextMiddleware, UnknownObject } from '../src';
 import { BoundaryError } from '../src/error';
 import { Context } from './types';
 
